@@ -23,9 +23,10 @@ class With
             }
             $return = call_user_func_array($callable, $scopes);
         } catch (\Exception $e) {
-            do {
+            // Oh for finally..
+            while ($i--) {
                 $scopes[$i]->leave();
-            } while ($i--);
+            }
             throw $e;
         }
 
