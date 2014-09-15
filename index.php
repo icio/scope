@@ -10,7 +10,7 @@ var_dump($_GET, glob("*"));
 
 With::scope(
     new KeyState($_GET, array('q' => 'test')),
-    new WorkingDirectory("src/icio/Scope"),
+    new WorkingDirectory("src/icio/AbstractScope"),
     function() {
         var_dump($_GET, glob("*"));
     }

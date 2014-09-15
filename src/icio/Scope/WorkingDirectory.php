@@ -2,31 +2,45 @@
 
 namespace icio\Scope;
 
-class WorkingDirectory extends Scope
+class WorkingDirectory extends AbstractScope
 {
     protected $previousDirectory;
     protected $directory;
+    protected $trackChanges = false;
 
-    public function __construct($directory)
+    /**
+     * @param string $directory
+     * @param bool   $trackChanges
+     */
+    public function __construct($directory, $trackChanges=false)
     {
         $this->directory = $directory;
+        $this->trackChanges = $trackChanges;
     }
 
     public function enterOnce()
     {
-        $this->previousDirectory = getcwd();
-        if (!$this->changeDirectory($this->directory)) {
-            throw new \RuntimeException("Unable to enter working directory");
-        }
+        $this->previousDirectory = $this->getCurrentWorkingDirectory();
+        $this->setCurrentWorkingDirectory($this->directory);
     }
 
     public function leaveOnce()
     {
-        chdir($this->previousDirectory);
+        if ($this->trackChanges) {
+            $this->directory = $this->getCurrentWorkingDirectory();
+        }
+        $this->setCurrentWorkingDirectory($this->previousDirectory);
     }
 
-    protected function changeDirectory($dir)
+    public function setCurrentWorkingDirectory($dir)
     {
-        return chdir($dir);
+        if (!@chdir($dir)) {
+            throw new \RuntimeException("Unable to change directory to $dir");
+        }
+    }
+
+    public function getCurrentWorkingDirectory()
+    {
+        return getcwd();
     }
 }

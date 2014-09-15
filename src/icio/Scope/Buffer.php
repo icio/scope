@@ -2,11 +2,13 @@
 
 namespace icio\Scope;
 
-class Buffer extends Scope
+class Buffer extends AbstractScope
 {
+    const STORE = 0;
     const CLEAN = 1;
     const FLUSH = 2;
 
+    protected $output = '';
     protected $exitBehaviour;
 
     public function __construct($exitBehaviour = self::FLUSH)
@@ -24,6 +26,9 @@ class Buffer extends Scope
             $this->cleanAndEndBuffer();
         } elseif ($this->exitBehaviour == self::FLUSH) {
             $this->flushAndEndBuffer();
+        } elseif ($this->exitBehaviour == self::STORE) {
+            $this->output = $this->getContents();
+            $this->cleanAndEndBuffer();
         }
     }
 
@@ -50,6 +55,10 @@ class Buffer extends Scope
     }
 
     public function getContents()
+    {
+        return $this->output . $this->getCurrentContent();
+    }
+    public function getCurrentContent()
     {
         return ob_get_contents();
     }

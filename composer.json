@@ -14,7 +14,7 @@
 
     "autoload": {
         "psr-4": {
-          "icio\\Scope\\": "src/icio/Scope/"
+          "icio\\Scope\\": "src/icio/AbstractScope/"
         }
     }
 }

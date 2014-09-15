@@ -2,35 +2,56 @@
 
 namespace icio\Scope;
 
-abstract class Scope implements ScopeInterface
+
+class Scope extends AbstractScope
 {
-    private $in = false;
+    /**
+     * @var ScopeInterface[]
+     */
+    protected $scopes;
 
-    public function enter()
+    /**
+     * @var int
+     */
+    protected $enteredScopes = 0;
+
+    /**
+     * @param $scopes
+     */
+    public function __construct($scopes)
     {
-        if ($this->in) {
-            throw new \RuntimeException("Cannot enter scope we're already in.");
+        if (is_array($scopes)) {
+            $this->scopes = $scopes;
         } else {
-            $this->in = true;
-            $this->enterOnce();
+            $this->scopes = func_get_args();
         }
     }
 
-    public function leave()
+    public function enterOnce()
     {
-        if ($this->in) {
-            $this->in = false;
-            $this->leaveOnce();
-        } else {
-            throw new \RuntimeException("Cannot exit scope we're not in.");
+        foreach ($this->scopes as $scope) {
+            $scope->enter();
+            $this->enteredScopes++;
         }
     }
 
-    public function isIn()
+    public function leaveOnce()
     {
-        return $this->in;
+        while ($this->enteredScopes--) {
+            $this->scopes[$this->enteredScopes]->leave();
+        }
     }
 
-    abstract public function enterOnce();
-    abstract public function leaveOnce();
+    protected function getCallArguments()
+    {
+        return $this->getScopes();
+    }
+
+    /**
+     * @return ScopeInterface[]
+     */
+    public function getScopes()
+    {
+        return $this->scopes;
+    }
 }
