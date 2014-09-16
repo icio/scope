@@ -11,7 +11,7 @@ before_script:
   - composer install --dev --prefer-source
 
 script:
-  - vendor/bin/phpspec run
+  - vendor/bin/phpspec run  --format pretty
 
 matrix:
   fast_finish: true
