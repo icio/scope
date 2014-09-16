@@ -1,4 +1,4 @@
-# Scope
+# Scope [![Build Status](https://travis-ci.org/icio/scope.svg?branch=master)](https://travis-ci.org/icio/scope)
 
 Scope offers a mechanism for preparing global environments and containers for the duration of a callback, keeping state mutation and clean-up to only declaration in your code. Inspired by Python's native [with](https://docs.python.org/2/reference/datamodel.html#with-statement-context-managers).
 
