@@ -22,10 +22,11 @@ Currently available scopes help with:
 
 * Collecting multiple scopes together, with `Scope`;
 * Setting temporary values on arrays, with `KeyState`;
-* Capturing function output, with `Buffer`; and
-* Changing into a new directory, with `WorkingDirectory`.
+* Capturing function output, with `Buffer`;
+* Changing into a new directory, with `WorkingDirectory`; and
+* Worrying about different error levels, with `ErrorReporting`.
 
-The `Buffer` can collect the output across multiple sessions, the `WorkingDirectory` can go back to the directory it left upon re-entry, and `KetState` can track the value of keys, should they be changed in-scope. See the spec tests for details.
+Sometimes you'll want to hop in and out of a given scope, providing default context by following the changes incurred by your actions within. The scopes can optionally account for this. The `Buffer` can collect the output across multiple sessions; the `WorkingDirectory` can go back to the directory it left upon re-entry; the `KetState` can track the value of keys, should they be changed in-scope; and the `ErrorReporting` can track any changes to the reporting. See the spec tests for details.
 
 All entered scopes are passed into the callback as function arguments. For example, when working with output buffers you can capture and return the output as so:
 
